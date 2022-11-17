@@ -10,9 +10,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install Scoop
+      - name: Install Scoop & GCC
         run: |
           Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
           iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
           scoop install gcc
+        shell: pwsh
+
+      - name: Build
+        run: |
+          C:\Users\runneradmin\scoop\apps\gcc\current\bin\g++.exe -g main.cpp -o FuckWindows.exe
         shell: pwsh
