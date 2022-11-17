@@ -2,24 +2,16 @@ name: Deploy
 
 on:
   push:
-    tags:
-      - "v*.*.*"
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-2022
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install GCC
-        uses: egor-tensin/setup-gcc@v1
-      
-      - name: Build
-        run: g++ -g main.cpp -o FuckWindows.exe
-
-      - name: Publish
-        uses: softprops/action-gh-release@v1
-        with:
-          generate_release_notes: false
-          files: FuckWindows.exe
+      - name: Install Scoop
+        run: |
+          Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+          irm get.scoop.sh | iex
+        shell: pwsh
