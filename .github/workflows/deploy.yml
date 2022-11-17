@@ -2,6 +2,8 @@ name: Deploy
 
 on:
   push:
+    tags:
+      - "v*.*.*"
 
 jobs:
   deploy:
@@ -21,3 +23,7 @@ jobs:
         run: |
           C:\Users\runneradmin\scoop\apps\gcc\current\bin\g++.exe -g main.cpp -o FuckWindows.exe
         shell: pwsh
+
+      - name: Publish Release
+        uses: softprops/action-gh-release@v1
+        files: FuckWindows.exe
