@@ -1,0 +1,25 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install GCC
+        uses: egor-tensin/setup-gcc@v1
+      
+      - name: Build
+        runs: g++.exe -g main.cpp -o FuckWindows.exe
+
+      - name: Publish
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: false
+          files: FuckWindows.exe
