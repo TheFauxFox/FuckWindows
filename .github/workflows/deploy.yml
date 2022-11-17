@@ -26,4 +26,5 @@ jobs:
 
       - name: Publish Release
         uses: softprops/action-gh-release@v1
-        files: FuckWindows.exe
+        with:
+          files: FuckWindows.exe
