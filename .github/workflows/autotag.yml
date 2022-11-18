@@ -1,0 +1,16 @@
+name: Create Tag
+
+on:
+  push:
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Make Version
+        uses: julesabr/tag-version@v1.5
