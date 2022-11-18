@@ -50,11 +50,11 @@ bool GotAdmin()
 
 void GetAdmin()
 {
-    char szPath[MAX_PATH];
+    wchar_t szPath[MAX_PATH];
     if (GetModuleFileName(NULL, szPath, ARRAYSIZE(szPath)))
     {
         SHELLEXECUTEINFO sei = {sizeof(sei)};
-        sei.lpVerb = "runas";
+        sei.lpVerb = L"runas";
         sei.lpFile = szPath;
         sei.hwnd = NULL;
         sei.nShow = SW_NORMAL;
