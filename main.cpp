@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <windows.h>
 #include <array>
+#include <sstream>
 
 void print(std::string msg, const char end = '\n')
 {
@@ -13,7 +14,7 @@ int run(std::string cmd, bool silent = false)
     std::string end = "";
     if (silent)
     {
-        end = " >NUL 2>NUL";
+        end = " >NUL 2>&1";
     }
     return system((cmd + end).c_str());
 }
@@ -120,59 +121,65 @@ void WinActivate()
     print("A'ight, fuck paying for Windows. We got this bag.");
 }
 
-template <typename Function>
-void printGuide(std::string msg, Function cb, bool show)
+bool getGuide(std::string msg, bool show)
 {
-    if (show)
+    if (!show)
     {
-        print(msg + " (Default: Yes)");
-        print("(y/n) >", *" ");
-        std::string resp;
-        std::getline(std::cin, resp);
-        if (strcasecmp(resp.c_str(), "n") == 0)
-        {
-            print("Skipping");
-            return;
-        }
-        else if (strcasecmp(resp.c_str(), "y") == 0)
-        {
-            cb();
-        }
-        else
-        {
-            print("I don't know what the fuck you entered, it wasn't y or n, but I'm calling it an n.");
-            return;
-        }
+        return true;
+    }
+    print("Wanna " + msg + "? (Default: Yes)");
+    print("(y/n) >", *" ");
+    std::string resp;
+    std::getline(std::cin, resp);
+    if (strcasecmp(resp.c_str(), "n") == 0)
+    {
+        print("Okay fine, skipping it");
+        return false;
+    }
+    else if (strcasecmp(resp.c_str(), "y") == 0)
+    {
+        return true;
     }
     else
     {
-        cb();
+        print("I don't know what the fuck you entered, it wasn't y or n, so I'm calling it an n.");
+        return false;
     }
 }
 
-void DisableDiagTrack()
+void sp(std::string label, std::string cmd)
 {
-    print("Disabling diagnostics tracking");
-    silent("sc stop DiagTrack");
-    silent("sc config DiagTrack start= disabled");
-    silent("sc stop diagnosticshub.standardcollector.service");
-    silent("sc config diagnosticshub.standardcollector.service start= disabled");
-    print("Done");
+    print(label);
+    silent(cmd);
 }
 
-void DisableDMW()
+void disableService(std::string name)
 {
-    print("Disabling DMWAppPushService");
-    silent("sc stop dmwappushservice");
-    silent("sc config dmwappushservice start= disabled");
-    print("Done");
-    print("Why is phone stuff on a desktop platform..?");
+    sp("[Service] Stopping " + name, "sc stop " + name);
+    sp("[Service] Disabling " + name, "sc config " + name + "start= disabled");
+}
+
+void setRegKey(std::string key, std::string value, std::string data)
+{
+    sp("[Registry] Setting " + key + "\\" + value + " to: " + data, "reg add \"" + key + "\" /v \"" + value + "\" /t REG_DWORD /d " + data + "/f");
+}
+
+void removePackage(std::string name)
+{
+    sp("[Bloatware] Removing package " + name, "PowerShell -Command \"Get-AppxPackage *" + name + "* | Remove-AppxPackage\"");
 }
 
 void DoEverything(bool guide)
 {
-    printGuide("Wanna disable diagnostics tracking?", DisableDiagTrack, guide);
-    printGuide("Wanna disable random phone shit?", DisableDMW, guide);
+    if (getGuide("disable diagnostics tracking", guide))
+    {
+        disableService("DiagTrack");
+        disableService("diagnosticshub.standardcollector.service");
+    }
+    if (getGuide("disable mobile push service", guide))
+    {
+        disableService("dmwapppushservice");
+    }
 }
 
 void MainScreen()
