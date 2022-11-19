@@ -169,6 +169,11 @@ void removePackage(std::string name)
     sp("[Bloatware] Removing package " + name, "PowerShell -Command \"Get-AppxPackage *" + name + "* | Remove-AppxPackage\"");
 }
 
+void disableTask(std::string name)
+{
+    sp("[Task] Disabling task " + name, "schtasks /Change /TN \"" + name + "\" /Disable");
+}
+
 void DoEverything(bool guide)
 {
     if (getGuide("disable diagnostics tracking", guide))
@@ -179,6 +184,56 @@ void DoEverything(bool guide)
     if (getGuide("disable mobile push service", guide))
     {
         disableService("dmwapppushservice");
+    }
+    if (getGuide("disable remote registry edits", guide))
+    {
+        disableService("RemoteRegistry");
+    }
+    if (getGuide("disable link tracking service", guide))
+    {
+        disableService("TrkWks");
+    }
+    if (getGuide("disable Windows Media Player network tracking", guide))
+    {
+        disableService("WMPNetworkSvc");
+    }
+    if (getGuide("disable Windows SuperFetch (background app pre-loading)", guide))
+    {
+        disableService("SysMain");
+    }
+    if (getGuide("remove the useless retail demo task", guide))
+    {
+        sp("[Service] Stopping RetailDemo", "sc stop RetailDemo");
+        sp("[Service] Removing RetailDemo", "sc delete RetailDemo");
+    }
+    if (getGuide("remove Windows alarms app", guide))
+    {
+        removePackage("WindowsAlarms");
+    }
+    if (getGuide("remove Office Hub app", guide))
+    {
+        removePackage("MicrosoftOfficeHub");
+    }
+    if (getGuide("remove OneNote app", guide))
+    {
+        removePackage("OneNote");
+    }
+    if (getGuide("remove Windows Phone app", guide))
+    {
+        removePackage("WindowsPhone");
+        removePackage("CommsPhone");
+    }
+    if (getGuide("remove Skype app (please)", guide))
+    {
+        removePackage("SkypeApp");
+    }
+    if (getGuide("remove Windows sound recorder app", guide))
+    {
+        removePackage("WindowsSoundRecorder");
+    }
+    if (getGuide("remove Windows Maps app (why would you use maps on a desktop..)", guide))
+    {
+        removePackage("WindowsMaps");
     }
 }
 
