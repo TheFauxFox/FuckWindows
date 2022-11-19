@@ -61,14 +61,14 @@ void GetAdmin()
         sei.nShow = SW_NORMAL;
         if (!ShellExecuteEx(&sei))
         {
-            print("BBBBBBBBBBBBBBBBB                                        hhhhhhh             ");
-            print("B::::::::::::::::B                                       h:::::h             ");
-            print("B::::::BBBBBB:::::B                                      h:::::h             ");
-            print("BB:::::B     B:::::B                                     h:::::h             ");
-            print("  B::::B     B:::::Brrrrr   rrrrrrrrr   uuuuuu    uuuuuu  h::::h hhhhh       ");
-            print("  B::::B     B:::::Br::::rrr:::::::::r  u::::u    u::::u  h::::hh:::::hhh    ");
-            print("  B::::BBBBBB:::::B r:::::::::::::::::r u::::u    u::::u  h::::::::::::::hh  ");
-            print("  B:::::::::::::BB  rr::::::rrrrr::::::ru::::u    u::::u  h:::::::hhh::::::h ");
+            print("BBBBBBBBBBBBBBBBB                                        hhhhhhh");
+            print("B::::::::::::::::B                                       h:::::h");
+            print("B::::::BBBBBB:::::B                                      h:::::h");
+            print("BB:::::B     B:::::B                                     h:::::h");
+            print("  B::::B     B:::::Brrrrr   rrrrrrrrr   uuuuuu    uuuuuu  h::::h hhhhh");
+            print("  B::::B     B:::::Br::::rrr:::::::::r  u::::u    u::::u  h::::hh:::::hhh");
+            print("  B::::BBBBBB:::::B r:::::::::::::::::r u::::u    u::::u  h::::::::::::::hh");
+            print("  B:::::::::::::BB  rr::::::rrrrr::::::ru::::u    u::::u  h:::::::hhh::::::h");
             print("  B::::BBBBBB:::::B  r:::::r     r:::::ru::::u    u::::u  h::::::h   h::::::h");
             print("  B::::B     B:::::B r:::::r     rrrrrrru::::u    u::::u  h:::::h     h:::::h");
             print("  B::::B     B:::::B r:::::r            u::::u    u::::u  h:::::h     h:::::h");
