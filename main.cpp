@@ -109,14 +109,14 @@ bool GotAdmin()
 void GetAdmin()
 {
     wchar_t szPath[MAX_PATH];
-    if (GetModuleFileName(NULL, szPath, ARRAYSIZE(szPath)))
+    if (GetModuleFileNameW(NULL, szPath, ARRAYSIZE(szPath)))
     {
-        SHELLEXECUTEINFO sei = {sizeof(sei)};
+        SHELLEXECUTEINFOW sei = {sizeof(sei)};
         sei.lpVerb = L"runas";
         sei.lpFile = szPath;
         sei.hwnd = NULL;
         sei.nShow = SW_NORMAL;
-        if (!ShellExecuteEx(&sei))
+        if (!ShellExecuteExW(&sei))
         {
             print("BBBBBBBBBBBBBBBBB                                           hhhhhhh");
             print("B::::::::::::::::B                                          h:::::h");
