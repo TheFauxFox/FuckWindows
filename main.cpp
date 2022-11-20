@@ -46,6 +46,26 @@ bool yn(std::string prompt, bool defaultVal = true)
     }
 }
 
+void countdown(std::string label, int seconds)
+{
+    for (int i = 0; i < seconds; i++)
+    {
+        std::string hasS = "s";
+        if (i == seconds - 1)
+        {
+            hasS = "";
+        }
+        print(label + std::to_string(seconds - i) + " second" + hasS, '\r');
+        Sleep(1000);
+    }
+}
+
+void initReboot()
+{
+    countdown("Rebooting in: ", 5);
+    silent("shutdown /r /t 0");
+}
+
 int run(std::string cmd, bool silent = false)
 {
     std::string end = "";
@@ -475,6 +495,29 @@ void settingsTweak(bool guide)
     }
 }
 
+bool disableDefender()
+{
+    if (yn("Last chance, still want to continue?"))
+    {
+        setRegKey("HKLM\\Software\\Policies\\Microsoft\\Windows Defender", "DisableAntiSpyware", "1");
+        setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\Real-Time Protection", "DisableBehaviorMonitoring", "1");
+        setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\Real-Time Protection", "DisableOnAccessProtection", "1");
+        setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\Real-Time Protection", "DisableScanOnRealtimeEnable", "1");
+        return true;
+    }
+    return false;
+}
+
+bool disableSmartScreen()
+{
+    if (yn("Last chance, still want to continue?"))
+    {
+        setRegKey("HKLM\\Software\\Policies\\Microsoft\\Windows\\System", "EnableSmartScreen", "0");
+        return true;
+    }
+    return false;
+}
+
 void MainScreen()
 {
     print("    ______           __      _       ___           __                  ");
@@ -508,26 +551,41 @@ void MainScreen()
     {
     case 1:
         WinActivate();
+        if (yn("Windows needs to reboot for the changes to take effect. Reboot now?"))
+        {
+            initReboot();
+        }
         break;
     case 2:
         disableTelemetry(yn("Wanna pick your options?", false));
+        if (yn("Windows needs to reboot for the changes to take effect. Reboot now?"))
+        {
+            initReboot();
+        }
         break;
     case 3:
         removeBloat(yn("Wanna pick your options?", false));
+        if (yn("Windows needs to reboot for the changes to take effect. Reboot now?"))
+        {
+            initReboot();
+        }
         break;
     case 4:
-        // settingsTweak(yn("Wanna pick your options?", false));
+        settingsTweak(yn("Wanna pick your options?", false));
+        if (yn("Windows needs to reboot for the changes to take effect. Reboot now?"))
+        {
+            initReboot();
+        }
         break;
     case 5:
         print("**WARNING**");
         print("This will remove your last resort anti-virus. This is potentially dangerous, if you're tech dumb.");
         if (yn("Still wanna continue?", false))
         {
-            if (yn("Would you also like to remove SmartScreen? The removal of both is paired nicely.", false))
+            if (disableDefender() && yn("Windows needs to reboot for the changes to take effect. Reboot now?"))
             {
-                // disableSmartScreen();
+                initReboot();
             }
-            // disableDefender();
         }
         break;
     case 6:
@@ -535,23 +593,27 @@ void MainScreen()
         print("This will remove the annoying popup for executables that Windows doesn't trust. This could lead to dumb mistakes if you're tech dumb.");
         if (yn("Still wanna continue?", false))
         {
-            // disableSmartScreen();
+            if (disableSmartScreen() && yn("Windows needs to reboot for the changes to take effect. Reboot now?"))
+            {
+                initReboot();
+            }
         }
         break;
     case 7:
         WinActivate();
         disableTelemetry(false);
         removeBloat(false);
-        // settingsTweak(false);
-        // disableDefender(false);
-        // disableSmartScreen(false);
+        settingsTweak(false);
+        disableDefender();
+        disableSmartScreen();
+        print("Windows has successfully been fucked.");
+        initReboot();
         break;
     case 0:
     default:
-        break;
+        print("Exiting");
+        Sleep(1500);
     }
-    print("\n[Press enter to continue]");
-    silent("pause");
 }
 
 int main()
