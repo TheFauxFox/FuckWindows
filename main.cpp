@@ -235,6 +235,257 @@ void DoEverything(bool guide)
     {
         removePackage("WindowsMaps");
     }
+    if (getGuide("automatically disable all telemetry (data collection) scheduled tasks (saying no will require you step through each one)", guide))
+    {
+        guide = false;
+    }
+    if (getGuide("disable smart screen telemetry", guide))
+    {
+        disableTask("Microsoft\\Windows\\AppID\\SmartScreenSpecific");
+    }
+    if (getGuide("disable application experience telemetry", guide))
+    {
+        disableTask("Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser");
+        disableTask("Microsoft\\Windows\\Application Experience\\ProgramDataUpdater");
+        disableTask("Microsoft\\Windows\\Application Experience\\StartupAppTask");
+        disableTask("Microsoft\\Windows\\Application Experience\\AitAgent");
+    }
+    if (getGuide("disable customer experience improvement telemetry", guide))
+    {
+        disableTask("Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator");
+        disableTask("Microsoft\\Windows\\Customer Experience Improvement Program\\KernelCeipTask");
+        disableTask("Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip");
+        disableTask("Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader");
+        disableTask("Microsoft\\Windows\\PI\\Sqm-Tasks");
+    }
+    if (getGuide("disable family safety upload (what the fuck)", guide))
+    {
+        disableTask("Microsoft\\Windows\\Shell\\FamilySafetyUpload");
+    }
+    if (getGuide("disable Office telemetry", guide))
+    {
+        disableTask("Microsoft\\Office\\OfficeTelemetryAgentLogOn");
+        disableTask("Microsoft\\Office\\OfficeTelemetryAgentFallBack");
+        disableTask("Microsoft\\Office\\Office 15 Subscription Heartbeat");
+    }
+    if (getGuide("disable disc diagnostic data telemetry", guide))
+    {
+        disableTask("Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticDataCollector");
+    }
+    if (getGuide("disable power efficiency telemetry", guide))
+    {
+        disableTask("Microsoft\\Windows\\Power Efficiency Diagnostics\\AnalyzeSystem");
+    }
+    if (getGuide("disable Windows error reporting telemetry", guide))
+    {
+        disableTask("Windows Error Reporting\\QueueReporting");
+    }
+    if (getGuide("disable Windows application performance telemetry", guide))
+    {
+        disableTask("Microsoft\\Windows\\maintenance\\winsat");
+    }
+    if (getGuide("disable Windows Media Player collecting info and not just playing media", guide))
+    {
+        disableTask("Microsoft\\Windows\\media center\\activateWindowssearch");
+        disableTask("Microsoft\\Windows\\media center\\configureinternettimeservice");
+        disableTask("Microsoft\\Windows\\media center\\dispatchrecoverytasks");
+        disableTask("Microsoft\\Windows\\media center\\ehdrminit");
+        disableTask("Microsoft\\Windows\\media center\\installplayready");
+        disableTask("Microsoft\\Windows\\media center\\mcupdate");
+        disableTask("Microsoft\\Windows\\media center\\mediacenterrecoverytask");
+        disableTask("Microsoft\\Windows\\media center\\objectstorerecoverytask");
+        disableTask("Microsoft\\Windows\\media center\\ocuractivate");
+        disableTask("Microsoft\\Windows\\media center\\ocurdiscovery");
+        disableTask("Microsoft\\Windows\\media center\\pbdadiscovery");
+        disableTask("Microsoft\\Windows\\media center\\pbdadiscoveryw1");
+        disableTask("Microsoft\\Windows\\media center\\pbdadiscoveryw2");
+        disableTask("Microsoft\\Windows\\media center\\pvrrecoverytask");
+        disableTask("Microsoft\\Windows\\media center\\pvrscheduletask");
+        disableTask("Microsoft\\Windows\\media center\\registersearch");
+        disableTask("Microsoft\\Windows\\media center\\reindexsearchroot");
+        disableTask("Microsoft\\Windows\\media center\\sqlliterecoverytask");
+        disableTask("Microsoft\\Windows\\media center\\updaterecordpath");
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
+    if (getGuide("", guide))
+    {
+    }
 }
 
 void MainScreen()
