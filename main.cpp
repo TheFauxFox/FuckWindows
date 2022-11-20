@@ -2,11 +2,48 @@
 #include <stdio.h>
 #include <windows.h>
 #include <array>
-#include <sstream>
+#include <string>
 
-void print(std::string msg, const char end = '\n')
+void print(std::string msg, char end = '\n')
 {
     std::cout << msg << end;
+}
+
+std::string input(std::string prompt)
+{
+    print(prompt, *"");
+    std::string resp;
+    std::getline(std::cin, resp);
+    return resp;
+}
+
+bool yn(std::string prompt, bool defaultVal = true)
+{
+    print(prompt);
+    std::string defaultStr = "[(y/n) Default: n]";
+    if (defaultVal)
+    {
+        defaultStr = "[(y/n) Default: y]";
+    }
+    std::string resp = input(defaultStr + " > ");
+    if (resp == "")
+    {
+        return defaultVal;
+    }
+    else if (strcasecmp(resp.c_str(), "n") == 0)
+    {
+        print("Okay fine, skipping it");
+        return false;
+    }
+    else if (strcasecmp(resp.c_str(), "y") == 0)
+    {
+        return true;
+    }
+    else
+    {
+        print("I don't know what the fuck you entered, it wasn't y or n, so I'm calling it an n.");
+        return false;
+    }
 }
 
 int run(std::string cmd, bool silent = false)
@@ -77,8 +114,24 @@ void GetAdmin()
             print("B:::::::::::::::::B   r:::::r              u:::::::::::::::u h:::::h     h:::::h");
             print("B::::::::::::::::B    r:::::r               uu::::::::uu:::u h:::::h     h:::::h");
             print("BBBBBBBBBBBBBBBBB     rrrrrrr                 uuuuuuuu  uuuu hhhhhhh     hhhhhhh");
-            print("\nI needed that to do this shit, why would you say no");
-            silent("pause");
+            if (!yn("Do you want to exit?"))
+            {
+                if (yn("Do you need to bypass the admin prompt? (AKA: Do you not have permission to run as admin?)"))
+                {
+                    print("Maybe at some point I'll include a special surprise..")
+                }
+                else
+                {
+                    if (yn("Want me to ask for admin again?"))
+                    {
+                        GetAdmin()
+                    }
+                    else
+                    {
+                        print("Christ you're confusing. I'm leaving.")
+                    }
+                }
+            }
         }
     }
 }
@@ -127,24 +180,7 @@ bool getGuide(std::string msg, bool show)
     {
         return true;
     }
-    print("Wanna " + msg + "? (Default: Yes)");
-    print("(y/n) >", *" ");
-    std::string resp;
-    std::getline(std::cin, resp);
-    if (strcasecmp(resp.c_str(), "n") == 0)
-    {
-        print("Okay fine, skipping it");
-        return false;
-    }
-    else if (strcasecmp(resp.c_str(), "y") == 0)
-    {
-        return true;
-    }
-    else
-    {
-        print("I don't know what the fuck you entered, it wasn't y or n, so I'm calling it an n.");
-        return false;
-    }
+    return yn("Wanna " + msg + "?");
 }
 
 void sp(std::string label, std::string cmd)
@@ -174,7 +210,7 @@ void disableTask(std::string name)
     sp("[Task] Disabling task " + name, "schtasks /Change /TN \"" + name + "\" /Disable");
 }
 
-void DoEverything(bool guide)
+void disableTelemetry(bool guide)
 {
     bool g = guide;
     if (getGuide("disable diagnostics tracking", guide))
@@ -206,45 +242,6 @@ void DoEverything(bool guide)
     {
         sp("[Service] Stopping RetailDemo", "sc stop RetailDemo");
         sp("[Service] Removing RetailDemo", "sc delete RetailDemo");
-    }
-    if (getGuide("remove Windows alarms app", guide))
-    {
-        removePackage("WindowsAlarms");
-    }
-    if (getGuide("remove Office Hub app", guide))
-    {
-        removePackage("MicrosoftOfficeHub");
-    }
-    if (getGuide("remove OneNote app", guide))
-    {
-        removePackage("OneNote");
-    }
-    if (getGuide("remove Windows Phone app", guide))
-    {
-        removePackage("WindowsPhone");
-        removePackage("CommsPhone");
-    }
-    if (getGuide("remove Skype app (please)", guide))
-    {
-        removePackage("SkypeApp");
-    }
-    if (getGuide("remove Windows sound recorder app", guide))
-    {
-        removePackage("WindowsSoundRecorder");
-    }
-    if (getGuide("remove Windows Maps app (why would you use maps on a desktop..)", guide))
-    {
-        removePackage("WindowsMaps");
-    }
-    if (getGuide("remove OneDrive integration", guide))
-    {
-        sp("Uninstalling OneDrive", "start /wait \"\" \"%%SYSTEMROOT%%\\SYSWOW64\\ONEDRIVESETUP.EXE\" /UNINSTALL");
-        sp("Removing OneDrive temp folder", "rd C:\\OneDriveTemp /Q /S");
-        sp("Removing OneDrive system folders", "rd \"%%USERPROFILE%%\\OneDrive\" /Q /S");
-        silent("rd \"%%LOCALAPPDATA%%\\Microsoft\\OneDrive\" /Q /S");
-        silent("rd \"%%PROGRAMDATA%%\\Microsoft OneDrive\" /Q /S");
-        sp("Remove OneDrive context menu items", "reg add \"HKEY_CLASSES_ROOT\\CLSID\\{018D5C66-4533-4307-9B53-224DE2ED1FE6}\\ShellFolder\" /f /v Attributes /t REG_DWORD /d 0");
-        silent("reg add \"HKEY_CLASSES_ROOT\\Wow6432Node\\CLSID\\{018D5C66-4533-4307-9B53-224DE2ED1FE6}\\ShellFolder\" /f /v Attributes /t REG_DWORD /d 0");
     }
     if (getGuide("automatically disable all telemetry (data collection) scheduled tasks (saying no will require you step through each one)", guide))
     {
@@ -370,158 +367,48 @@ void DoEverything(bool guide)
         setRegKey("HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search", "BingSearchEnabled", "0");
         setRegKey("HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search", "BingSearchEnabled", "0");
     }
-    if (getGuide("", guide))
+}
+
+void removeBloat(bool guide)
+{
+    if (getGuide("remove Windows alarms app", guide))
     {
+        removePackage("WindowsAlarms");
     }
-    if (getGuide("", guide))
+    if (getGuide("remove Office Hub app", guide))
     {
+        removePackage("MicrosoftOfficeHub");
     }
-    if (getGuide("", guide))
+    if (getGuide("remove OneNote app", guide))
     {
+        removePackage("OneNote");
     }
-    if (getGuide("", guide))
+    if (getGuide("remove Windows Phone app", guide))
     {
+        removePackage("WindowsPhone");
+        removePackage("CommsPhone");
     }
-    if (getGuide("", guide))
+    if (getGuide("remove Skype app (please)", guide))
     {
+        removePackage("SkypeApp");
     }
-    if (getGuide("", guide))
+    if (getGuide("remove Windows sound recorder app", guide))
     {
+        removePackage("WindowsSoundRecorder");
     }
-    if (getGuide("", guide))
+    if (getGuide("remove Windows Maps app (why would you use maps on a desktop..)", guide))
     {
+        removePackage("WindowsMaps");
     }
-    if (getGuide("", guide))
+    if (getGuide("remove OneDrive integration", guide))
     {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
-    }
-    if (getGuide("", guide))
-    {
+        sp("Uninstalling OneDrive", "start /wait \"\" \"%%SYSTEMROOT%%\\SYSWOW64\\ONEDRIVESETUP.EXE\" /UNINSTALL");
+        sp("Removing OneDrive temp folder", "rd C:\\OneDriveTemp /Q /S");
+        sp("Removing OneDrive system folders", "rd \"%%USERPROFILE%%\\OneDrive\" /Q /S");
+        silent("rd \"%%LOCALAPPDATA%%\\Microsoft\\OneDrive\" /Q /S");
+        silent("rd \"%%PROGRAMDATA%%\\Microsoft OneDrive\" /Q /S");
+        sp("Remove OneDrive context menu items", "reg add \"HKEY_CLASSES_ROOT\\CLSID\\{018D5C66-4533-4307-9B53-224DE2ED1FE6}\\ShellFolder\" /f /v Attributes /t REG_DWORD /d 0");
+        silent("reg add \"HKEY_CLASSES_ROOT\\Wow6432Node\\CLSID\\{018D5C66-4533-4307-9B53-224DE2ED1FE6}\\ShellFolder\" /f /v Attributes /t REG_DWORD /d 0");
     }
 }
 
@@ -532,12 +419,27 @@ void MainScreen()
     print("  / /_  / / / / ___/ //_/   | | /| / / / __ \\/ __  / __ \\ | /| / / ___/");
     print(" / __/ / /_/ / /__/ ,<      | |/ |/ / / / / / /_/ / /_/ / |/ |/ (__  ) ");
     print("/_/    \\__,_/\\___/_/|_|     |__/|__/_/_/ /_/\\__,_/\\____/|__/|__/____/");
-    print("\n  Made with hatred by Faux\n\n");
+    print("\n  Made with hatred by Faux");
+    print("\n----------------DISCLAIMER----------------");
+    print("  1) This tool is simply a proof of concept that and for myself to learn C++.");
+    print("     I do not condone stealing software, especially from billion-dollar corporations");
+    print("     that definitely need your $200. Please throw money at the Windows overlords before");
+    print("     using this. (Any language within the software implying otherwise is satire)");
+    print("  2) I am also not responsible for any instability or viruses caused by the use of this");
+    print("     tool. If you choose to disable Defender/SmartScreen/Windows Updates,");
+    print("     you may make your machine vulnerable to a plethora of attack methods if you're");
+    print("     dumb enough to trust every \"Free Nature Background\" application in existence.");
+    print("  3) If you have any questions, please check out the tutorial video linked here:");
+    print("     https://www.youtube.com/watch?v=dQw4w9WgXcQ");
     print("------------------------------------------");
     print("    [0] - Exit");
-    print("    [1] - Auto-Run");
-    print("    [2] - Guided Run");
-    print("    [3] - Activate Windows");
+    print("    [1] - Activate Windows");
+    print("    [2] - Disable Telemetry");
+    print("    [3] - Remove Bloatware");
+    print("    [4] - Settings Tweaks");
+    print("    [5] - Disable Windows Defender");
+    print("    [6] - Disable Windows SmartScreen");
+    print("    [7] - Fuck Windows");
     print("\n");
     print(">>", *" ");
     int resp;
@@ -545,12 +447,44 @@ void MainScreen()
     switch (resp)
     {
     case 1:
-        DoEverything(false);
+        WinActivate();
         break;
     case 2:
-        DoEverything(true);
+        disableTelemetry(yn("Wanna pick your options?", false));
+        break;
     case 3:
+        removeBloat(yn("Wanna pick your options?", false));
+        break;
+    case 4:
+        // settingsTweak(yn("Wanna pick your options?", false));
+        break;
+    case 5:
+        print("**WARNING**");
+        print("This will remove your last resort anti-virus. This is potentially dangerous, if you're tech dumb.");
+        if (yn("Still wanna continue?", false))
+        {
+            if (yn("Would you also like to remove SmartScreen? The removal of both is paired nicely.", false))
+            {
+                // disableSmartScreen();
+            }
+            // disableDefender();
+        }
+        break;
+    case 6:
+        print("**WARNING**");
+        print("This will remove the annoying popup for executables that Windows doesn't trust. This could lead to dumb mistakes if you're tech dumb.");
+        if (yn("Still wanna continue?", false))
+        {
+            // disableSmartScreen();
+        }
+        break;
+    case 7:
         WinActivate();
+        disableTelemetry(false);
+        removeBloat(false);
+        // settingsTweak(false);
+        // disableDefender(false);
+        // disableSmartScreen(false);
         break;
     case 0:
     default:
