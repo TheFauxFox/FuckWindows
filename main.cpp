@@ -176,6 +176,7 @@ void disableTask(std::string name)
 
 void DoEverything(bool guide)
 {
+    bool g = guide;
     if (getGuide("disable diagnostics tracking", guide))
     {
         disableService("DiagTrack");
@@ -316,6 +317,7 @@ void DoEverything(bool guide)
         disableTask("Microsoft\\Windows\\media center\\sqlliterecoverytask");
         disableTask("Microsoft\\Windows\\media center\\updaterecordpath");
     }
+    guide = g;
     if (getGuide("", guide))
     {
     }
