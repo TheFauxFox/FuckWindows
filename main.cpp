@@ -118,17 +118,17 @@ void GetAdmin()
             {
                 if (yn("Do you need to bypass the admin prompt? (AKA: Do you not have permission to run as admin?)"))
                 {
-                    print("Maybe at some point I'll include a special surprise..")
+                    print("Maybe at some point I'll include a special surprise..");
                 }
                 else
                 {
                     if (yn("Want me to ask for admin again?"))
                     {
-                        GetAdmin()
+                        GetAdmin();
                     }
                     else
                     {
-                        print("Christ you're confusing. I'm leaving.")
+                        print("Christ you're confusing. I'm leaving.");
                     }
                 }
             }
@@ -420,7 +420,7 @@ void MainScreen()
     print(" / __/ / /_/ / /__/ ,<      | |/ |/ / / / / / /_/ / /_/ / |/ |/ (__  ) ");
     print("/_/    \\__,_/\\___/_/|_|     |__/|__/_/_/ /_/\\__,_/\\____/|__/|__/____/");
     print("\n  Made with hatred by Faux");
-    print("\n----------------DISCLAIMER----------------");
+    print("\n---------------------------------------DISCLAIMER---------------------------------------");
     print("  1) This tool is simply a proof of concept that and for myself to learn C++.");
     print("     I do not condone stealing software, especially from billion-dollar corporations");
     print("     that definitely need your $200. Please throw money at the Windows overlords before");
@@ -431,7 +431,7 @@ void MainScreen()
     print("     dumb enough to trust every \"Free Nature Background\" application in existence.");
     print("  3) If you have any questions, please check out the tutorial video linked here:");
     print("     https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-    print("------------------------------------------");
+    print("----------------------------------------------------------------------------------------\n");
     print("    [0] - Exit");
     print("    [1] - Activate Windows");
     print("    [2] - Disable Telemetry");
@@ -440,10 +440,7 @@ void MainScreen()
     print("    [5] - Disable Windows Defender");
     print("    [6] - Disable Windows SmartScreen");
     print("    [7] - Fuck Windows");
-    print("\n");
-    print(">>", *" ");
-    int resp;
-    std::cin >> resp;
+    int resp = std::stoi(input("\n>> "));
     switch (resp)
     {
     case 1:
