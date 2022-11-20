@@ -412,6 +412,69 @@ void removeBloat(bool guide)
     }
 }
 
+void settingsTweak(bool guide)
+{
+    if (getGuide("disable windows update", guide))
+    {
+        setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU", "NoAutoUpdate", "1");
+    }
+    if (getGuide("hide taskbar search box (You can still search by tapping the Windows key)", guide))
+    {
+        setRegKey("HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search", "SearchboxTaskbarMode", "0");
+    }
+    if (getGuide("set the file explorer to start in \"This PC\" instead of \"Quick Access\"", guide))
+    {
+        setRegKey("HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "LaunchTo", "1");
+    }
+    if (getGuide("show hidden files in the file explorer", guide))
+    {
+        setRegKey("HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "Hidden", "1");
+    }
+    if (getGuide("show hidden system files in the file explorer", guide))
+    {
+        setRegKey("HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "ShowSuperHidden", "1");
+    }
+    if (getGuide("show file extensions in the file explorer", guide))
+    {
+        setRegKey("HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "HideFileExt", "0");
+    }
+    if (getGuide("disable SmartScreen for Windows Store apps (doesn't change if you disable SmartScreen entirely)", guide))
+    {
+        setRegKey("HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppHost", "EnableWebContentEvaluation", "0");
+    }
+    if (getGuide("add a context menu option to take full ownership of any file or directory (misuse may cause issues)", guide))
+    {
+        setRegKey("HKCR\\*\\shell\\runas", "@", "Take Ownership");
+        setRegKey("HKCR\\*\\shell\\runas", "NoWorkingDirectory", "");
+        setRegKey("HKCR\\*\\shell\\runas\\command", "@", "cmd.exe /c takeown /f \\\"%1\\\" && icacls \\\"%1\\\" /grant administrators:F");
+        setRegKey("HKCR\\*\\shell\\runas\\command", "IsolatedCommand", "cmd.exe /c takeown /f \\\"%1\\\" && icacls \\\"%1\\\" /grant administrators:F");
+        setRegKey("HKCR\\Directory\\shell\\runas", "@", "Take Ownership");
+        setRegKey("HKCR\\Directory\\shell\\runas", "NoWorkingDirectory", "");
+        setRegKey("HKCR\\Directory\\shell\\runas\\command", "@", "cmd.exe /c takeown /f \\\"%1\\\" /r /d y && icacls \\\"%1\\\" /grant administrators:F /t");
+        setRegKey("HKCR\\Directory\\shell\\runas\\command", "IsolatedCommand", "cmd.exe /c takeown /f \\\"%1\\\" /r /d y && icacls \\\"%1\\\" /grant administrators:F /t");
+    }
+    if (getGuide("set Windows to use the dark theme", guide))
+    {
+        setRegKey("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", "0");
+    }
+    if (getGuide("enable Windows \"verbose\" mode (more info on login and shutdown)", guide))
+    {
+        setRegKey("HKLM\\SOFTWARE\\WOW6432Node\\Microsoft", "VerboseStatus", "32");
+    }
+    if (getGuide("(theoretically) boost network transfer speeds", guide))
+    {
+        setRegKey("HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters", "IRPStackSize", "32");
+    }
+    if (getGuide("disable the useless function called \"Shake to Minimize\" (Try shaking this window side to side rapidly)", guide))
+    {
+        setRegKey("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "DisallowShaking", "1");
+    }
+    if (getGuide("set clicking on an app in the taskbar with multiple windows open to automatically open the last active window", guide))
+    {
+        setRegKey("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "LastActiveClick", "1");
+    }
+}
+
 void MainScreen()
 {
     print("    ______           __      _       ___           __                  ");
