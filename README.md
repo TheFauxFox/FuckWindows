@@ -6,7 +6,7 @@ I typically hate setting up Windows 10 environments. This is due to plenty of fa
 * I hate telemetry
 * I hate bloatware
 * I hate Windows
-* I don't want to pay for activation
+* I don't want to pay for activation *don't steal software, this is satire*
 
 This will be my fun new script to setup Windows 10 to the same, semi-debloated -- yet still functional -- state every time.
 
