@@ -3,7 +3,6 @@
 I typically hate setting up Windows 10 environments. This is due to plenty of factors, but the main parts are:
 * I hate Windows SmartScreen
 * I hate Windows Defender
-* I hate Edge
 * I hate telemetry
 * I hate bloatware
 * I hate Windows
