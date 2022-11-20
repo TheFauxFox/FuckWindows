@@ -318,32 +318,57 @@ void DoEverything(bool guide)
         disableTask("Microsoft\\Windows\\media center\\updaterecordpath");
     }
     guide = g;
-    if (getGuide("", guide))
+    if (getGuide("disable Windows telemetry registry keys", guide))
     {
+        setRegKey("HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Device Metadata", "PreventDeviceMetadataFromNetwork", "1");
+        setRegKey("HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection", "AllowTelemetry", "0");
+        setRegKey("HKLM\\SOFTWARE\\Wow6432Node\\Policies\\Microsoft\\Windows\\DataCollection", "AllowTelemetry", "0");
+        setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\MRT", "DontOfferThroughWUAU", "1");
+        setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\SQMClient\\Windows", "CEIPEnable", "0");
+        setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat", "AITEnable", "0");
+        setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat", "DisableUAR", "1");
+        setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection", "AllowTelemetry", "0");
+        setRegKey("HKLM\\SYSTEM\\CurrentControlSet\\Control\\WMI\\AutoLogger\\AutoLogger-Diagtrack-Listener", "Start", "0");
+        setRegKey("HKLM\\SYSTEM\\CurrentControlSet\\Control\\WMI\\AutoLogger\\SQMLogger", "Start", "0");
     }
-    if (getGuide("", guide))
+    if (getGuide("disable your advertising id", guide))
     {
+        setRegKey("HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo", "Enabled", "0");
     }
-    if (getGuide("", guide))
+    if (getGuide("stop websites from knowing what languages you have installed", guide))
     {
+        setRegKey("HKCU\\Control Panel\\International\\User Profile", "HttpAcceptLanguageOptOut", "1");
     }
-    if (getGuide("", guide))
+    if (getGuide("disable Windows hotspot (desktops usually can't use this anyways)", guide))
     {
+        setRegKey("HKLM\\Software\\Microsoft\\PolicyManager\\default\\WiFi\\AllowWiFiHotSpotReporting", "value", "0");
+        setRegKey("HKLM\\Software\\Microsoft\\PolicyManager\\default\\WiFi\\AllowAutoConnectToWiFiSenseHotspots", "value", "0");
     }
-    if (getGuide("", guide))
+    if (getGuide("disable Windows wifi password sharing (please don't share my wifi creds with Facebook friends..)", guide))
     {
+        setRegKey("HKLM\\software\\microsoft\\wcmsvc\\wifinetworkmanager", "wifisensecredshared", "0");
+        setRegKey("HKLM\\software\\microsoft\\wcmsvc\\wifinetworkmanager", "wifisenseopen", "0");
     }
-    if (getGuide("", guide))
+    if (getGuide("disable Windows update from downloading from other Windows user (outside your own local network, kinda weird mate)", guide))
     {
+        setRegKey("HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DeliveryOptimization\\Config", "DoDownloadMode", "0");
     }
-    if (getGuide("", guide))
+    if (getGuide("stop Windows from showing your most recently used apps in the start menu", guide))
     {
+        setRegKey("HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced", "Start_TrackDocs", "0");
     }
-    if (getGuide("", guide))
+    if (getGuide("disable Windows Defender (codenamed spynet in the registry..) from sending files to Microsoft", guide))
     {
+        setRegKey("HKLM\\software\\microsoft\\windows defender\\spynet", "spynetreporting", "0");
+        setRegKey("HKLM\\software\\microsoft\\windows defender\\spynet", "submitsamplesconsent", "0");
     }
-    if (getGuide("", guide))
+    if (getGuide("disable Windows Search (task bar search) from using Cortana and Bing (Also disables Cortana search when Windows is locked)", guide))
     {
+        setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search", "AllowCortana", "0");
+        setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search", "AllowCortanaAboveLock", "0");
+        setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search", "AllowSearchToUseLocation", "0");
+        setRegKey("HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search", "BingSearchEnabled", "0");
+        setRegKey("HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search", "BingSearchEnabled", "0");
     }
     if (getGuide("", guide))
     {
