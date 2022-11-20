@@ -235,6 +235,16 @@ void DoEverything(bool guide)
     {
         removePackage("WindowsMaps");
     }
+    if (getGuide("remove OneDrive integration", guide))
+    {
+        silent("start /wait \"\" \"%%SYSTEMROOT%%\\SYSWOW64\\ONEDRIVESETUP.EXE\" /UNINSTALL");
+        silent("rd C:\\OneDriveTemp /Q /S");
+        silent("rd \"%%USERPROFILE%%\\OneDrive\" /Q /S");
+        silent("rd \"%%LOCALAPPDATA%%\\Microsoft\\OneDrive\" /Q /S");
+        silent("rd \"%%PROGRAMDATA%%\\Microsoft OneDrive\" /Q /S");
+        silent("reg add \"HKEY_CLASSES_ROOT\\CLSID\\{018D5C66-4533-4307-9B53-224DE2ED1FE6}\\ShellFolder\" /f /v Attributes /t REG_DWORD /d 0");
+        silent("reg add \"HKEY_CLASSES_ROOT\\Wow6432Node\\CLSID\\{018D5C66-4533-4307-9B53-224DE2ED1FE6}\\ShellFolder\" /f /v Attributes /t REG_DWORD /d 0");
+    }
     if (getGuide("automatically disable all telemetry (data collection) scheduled tasks (saying no will require you step through each one)", guide))
     {
         guide = false;
