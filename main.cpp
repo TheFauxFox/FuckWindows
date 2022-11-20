@@ -60,12 +60,6 @@ void countdown(std::string label, int seconds)
     }
 }
 
-void initReboot()
-{
-    countdown("Rebooting in: ", 5);
-    silent("shutdown /r /t 0");
-}
-
 int run(std::string cmd, bool silent = false)
 {
     std::string end = "";
@@ -79,6 +73,12 @@ int run(std::string cmd, bool silent = false)
 int silent(std::string cmd)
 {
     return run(cmd, true);
+}
+
+void initReboot()
+{
+    countdown("Rebooting in: ", 5);
+    silent("shutdown /r /t 0");
 }
 
 bool GotAdmin()
