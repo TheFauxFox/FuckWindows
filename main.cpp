@@ -61,22 +61,22 @@ void GetAdmin()
         sei.nShow = SW_NORMAL;
         if (!ShellExecuteEx(&sei))
         {
-            print("BBBBBBBBBBBBBBBBB                                        hhhhhhh");
-            print("B::::::::::::::::B                                       h:::::h");
-            print("B::::::BBBBBB:::::B                                      h:::::h");
-            print("BB:::::B     B:::::B                                     h:::::h");
-            print("  B::::B     B:::::Brrrrr   rrrrrrrrr   uuuuuu    uuuuuu  h::::h hhhhh");
-            print("  B::::B     B:::::Br::::rrr:::::::::r  u::::u    u::::u  h::::hh:::::hhh");
-            print("  B::::BBBBBB:::::B r:::::::::::::::::r u::::u    u::::u  h::::::::::::::hh");
-            print("  B:::::::::::::BB  rr::::::rrrrr::::::ru::::u    u::::u  h:::::::hhh::::::h");
-            print("  B::::BBBBBB:::::B  r:::::r     r:::::ru::::u    u::::u  h::::::h   h::::::h");
-            print("  B::::B     B:::::B r:::::r     rrrrrrru::::u    u::::u  h:::::h     h:::::h");
-            print("  B::::B     B:::::B r:::::r            u::::u    u::::u  h:::::h     h:::::h");
-            print("  B::::B     B:::::B r:::::r            u:::::uuuu:::::u  h:::::h     h:::::h");
-            print("BB:::::BBBBBB::::::B r:::::r            u:::::::::::::::uuh:::::h     h:::::h");
-            print("B:::::::::::::::::B  r:::::r             u:::::::::::::::uh:::::h     h:::::h");
-            print("B::::::::::::::::B   r:::::r              uu::::::::uu:::uh:::::h     h:::::h");
-            print("BBBBBBBBBBBBBBBBB    rrrrrrr                uuuuuuuu  uuuuhhhhhhh     hhhhhhh");
+            print("BBBBBBBBBBBBBBBBB                                           hhhhhhh");
+            print("B::::::::::::::::B                                          h:::::h");
+            print("B::::::BBBBBB:::::B                                         h:::::h");
+            print("BB:::::B     B:::::B                                        h:::::h");
+            print("  B::::B     B:::::B rrrrr   rrrrrrrrr    uuuuuu    uuuuuu   h::::h hhhhh");
+            print("  B::::B     B:::::B r::::rrr:::::::::r   u::::u    u::::u   h::::hh:::::hhh");
+            print("  B::::BBBBBB:::::B  r:::::::::::::::::r  u::::u    u::::u   h::::::::::::::hh");
+            print("  B:::::::::::::BB   rr::::::rrrrr::::::r u::::u    u::::u   h:::::::hhh::::::h");
+            print("  B::::BBBBBB:::::B   r:::::r     r:::::r u::::u    u::::u   h::::::h   h::::::h");
+            print("  B::::B     B:::::B  r:::::r     rrrrrrr u::::u    u::::u   h:::::h     h:::::h");
+            print("  B::::B     B:::::B  r:::::r             u::::u    u::::u   h:::::h     h:::::h");
+            print("  B::::B     B:::::B  r:::::r             u:::::uuuu:::::u   h:::::h     h:::::h");
+            print("BB:::::BBBBBB::::::B  r:::::r             u:::::::::::::::uu h:::::h     h:::::h");
+            print("B:::::::::::::::::B   r:::::r              u:::::::::::::::u h:::::h     h:::::h");
+            print("B::::::::::::::::B    r:::::r               uu::::::::uu:::u h:::::h     h:::::h");
+            print("BBBBBBBBBBBBBBBBB     rrrrrrr                 uuuuuuuu  uuuu hhhhhhh     hhhhhhh");
             print("\nI needed that to do this shit, why would you say no");
             silent("pause");
         }
@@ -238,12 +238,12 @@ void DoEverything(bool guide)
     }
     if (getGuide("remove OneDrive integration", guide))
     {
-        silent("start /wait \"\" \"%%SYSTEMROOT%%\\SYSWOW64\\ONEDRIVESETUP.EXE\" /UNINSTALL");
-        silent("rd C:\\OneDriveTemp /Q /S");
-        silent("rd \"%%USERPROFILE%%\\OneDrive\" /Q /S");
+        sp("Uninstalling OneDrive", "start /wait \"\" \"%%SYSTEMROOT%%\\SYSWOW64\\ONEDRIVESETUP.EXE\" /UNINSTALL");
+        sp("Removing OneDrive temp folder", "rd C:\\OneDriveTemp /Q /S");
+        sp("Removing OneDrive system folders", "rd \"%%USERPROFILE%%\\OneDrive\" /Q /S");
         silent("rd \"%%LOCALAPPDATA%%\\Microsoft\\OneDrive\" /Q /S");
         silent("rd \"%%PROGRAMDATA%%\\Microsoft OneDrive\" /Q /S");
-        silent("reg add \"HKEY_CLASSES_ROOT\\CLSID\\{018D5C66-4533-4307-9B53-224DE2ED1FE6}\\ShellFolder\" /f /v Attributes /t REG_DWORD /d 0");
+        sp("Remove OneDrive context menu items", "reg add \"HKEY_CLASSES_ROOT\\CLSID\\{018D5C66-4533-4307-9B53-224DE2ED1FE6}\\ShellFolder\" /f /v Attributes /t REG_DWORD /d 0");
         silent("reg add \"HKEY_CLASSES_ROOT\\Wow6432Node\\CLSID\\{018D5C66-4533-4307-9B53-224DE2ED1FE6}\\ShellFolder\" /f /v Attributes /t REG_DWORD /d 0");
     }
     if (getGuide("automatically disable all telemetry (data collection) scheduled tasks (saying no will require you step through each one)", guide))
