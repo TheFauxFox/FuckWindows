@@ -217,7 +217,7 @@ void disableService(std::string name)
 
 void setRegKey(std::string key, std::string value, std::string data)
 {
-    sp("[Registry] Setting " + key + "\\" + value + " to: " + data, "reg add \"" + key + "\" /v \"" + value + "\" /t REG_DWORD /d " + data + "/f");
+    sp("[Registry] Setting " + key + "\\" + value + " to: " + data, "reg add \"" + key + "\" /v \"" + value + "\" /t REG_DWORD /d " + data + " /f");
 }
 
 void removePackage(std::string name)
@@ -420,16 +420,6 @@ void removeBloat(bool guide)
     {
         removePackage("WindowsMaps");
     }
-    if (getGuide("remove OneDrive integration", guide))
-    {
-        sp("Uninstalling OneDrive", "start /wait \"\" \"%%SYSTEMROOT%%\\SYSWOW64\\ONEDRIVESETUP.EXE\" /UNINSTALL");
-        sp("Removing OneDrive temp folder", "rd C:\\OneDriveTemp /Q /S");
-        sp("Removing OneDrive system folders", "rd \"%%USERPROFILE%%\\OneDrive\" /Q /S");
-        silent("rd \"%%LOCALAPPDATA%%\\Microsoft\\OneDrive\" /Q /S");
-        silent("rd \"%%PROGRAMDATA%%\\Microsoft OneDrive\" /Q /S");
-        sp("Remove OneDrive context menu items", "reg add \"HKEY_CLASSES_ROOT\\CLSID\\{018D5C66-4533-4307-9B53-224DE2ED1FE6}\\ShellFolder\" /f /v Attributes /t REG_DWORD /d 0");
-        silent("reg add \"HKEY_CLASSES_ROOT\\Wow6432Node\\CLSID\\{018D5C66-4533-4307-9B53-224DE2ED1FE6}\\ShellFolder\" /f /v Attributes /t REG_DWORD /d 0");
-    }
 }
 
 void settingsTweak(bool guide)
@@ -495,27 +485,54 @@ void settingsTweak(bool guide)
     }
 }
 
-bool disableDefender()
+bool disableDefender(bool guide)
 {
-    if (yn("Last chance, still want to continue?"))
+    if (guide)
     {
+        if (yn("Last chance, still want to continue?"))
+        {
+            disableService("WinDefend");
+            disableService("WdNisSvc");
+            disableService("Sense");
+            disableService("mpssvc");
+            setRegKey("HKLM\\Software\\Policies\\Microsoft\\Windows Defender", "DisableAntiSpyware", "1");
+            setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\Real-Time Protection", "DisableBehaviorMonitoring", "1");
+            setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\Real-Time Protection", "DisableOnAccessProtection", "1");
+            setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\Real-Time Protection", "DisableScanOnRealtimeEnable", "1");
+            return true;
+        }
+        return false;
+    }
+    else
+    {
+        disableService("WinDefend");
+        disableService("WdNisSvc");
+        disableService("Sense");
+        disableService("mpssvc");
         setRegKey("HKLM\\Software\\Policies\\Microsoft\\Windows Defender", "DisableAntiSpyware", "1");
         setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\Real-Time Protection", "DisableBehaviorMonitoring", "1");
         setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\Real-Time Protection", "DisableOnAccessProtection", "1");
         setRegKey("HKLM\\SOFTWARE\\Policies\\Microsoft\\Real-Time Protection", "DisableScanOnRealtimeEnable", "1");
         return true;
     }
-    return false;
 }
 
-bool disableSmartScreen()
+bool disableSmartScreen(bool guide)
 {
-    if (yn("Last chance, still want to continue?"))
+    if (guide)
+    {
+        if (yn("Last chance, still want to continue?"))
+        {
+            setRegKey("HKLM\\Software\\Policies\\Microsoft\\Windows\\System", "EnableSmartScreen", "0");
+            return true;
+        }
+        return false;
+    }
+    else
     {
         setRegKey("HKLM\\Software\\Policies\\Microsoft\\Windows\\System", "EnableSmartScreen", "0");
         return true;
     }
-    return false;
 }
 
 void MainScreen()
@@ -582,7 +599,7 @@ void MainScreen()
         print("This will remove your last resort anti-virus. This is potentially dangerous, if you're tech dumb.");
         if (yn("Still wanna continue?", false))
         {
-            if (disableDefender() && yn("Windows needs to reboot for the changes to take effect. Reboot now?"))
+            if (disableDefender(true) && yn("Windows needs to reboot for the changes to take effect. Reboot now?"))
             {
                 initReboot();
             }
@@ -593,7 +610,7 @@ void MainScreen()
         print("This will remove the annoying popup for executables that Windows doesn't trust. This could lead to dumb mistakes if you're tech dumb.");
         if (yn("Still wanna continue?", false))
         {
-            if (disableSmartScreen() && yn("Windows needs to reboot for the changes to take effect. Reboot now?"))
+            if (disableSmartScreen(true) && yn("Windows needs to reboot for the changes to take effect. Reboot now?"))
             {
                 initReboot();
             }
@@ -601,11 +618,11 @@ void MainScreen()
         break;
     case 7:
         WinActivate();
+        disableDefender(false);
+        disableSmartScreen(false);
         disableTelemetry(false);
         removeBloat(false);
         settingsTweak(false);
-        disableDefender();
-        disableSmartScreen();
         print("Windows has successfully been fucked.");
         initReboot();
         break;
